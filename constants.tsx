@@ -76,7 +76,7 @@ export const CRATES: Crate[] = [
 export const UPGRADES: Upgrade[] = [
   { id: 'click-1', name: 'Heavy Grip', description: 'Increases clicking power by 2x.', baseCost: 10, multiplier: 2, type: 'click' },
   { id: 'click-crit', name: 'Critical Slap', description: 'Increases crit chance by 5%.', baseCost: 100, multiplier: 1.5, type: 'click' },
-  { id: 'auto-1', name: 'Junior Apprentice', description: 'Unlocks a basic auto-clicker.', baseCost: 200, multiplier: 1.1, type: 'automation' },
+  { id: 'auto-fingers', name: 'Caffeinated Fingers', description: 'Your fingers move on their own! Automatically taps for you.', baseCost: 500, multiplier: 1.8, type: 'automation' },
   { id: 'auto-speed', name: 'Turbo Engines', description: 'Increases automation speed by 10%.', baseCost: 1000, multiplier: 1.2, type: 'automation' },
   { id: 'boost-slot', name: 'Extra Cup Holder', description: 'Unlocks an extra flavor slot.', baseCost: 5000, multiplier: 2.5, type: 'boost' },
   { id: 'boost-perc', name: 'Synergy Boost', description: 'Increases total CPS by 5%.', baseCost: 2500, multiplier: 1.5, type: 'boost' },

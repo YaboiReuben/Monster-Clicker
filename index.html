@@ -1,194 +1,80 @@
+
 <!DOCTYPE html>
 <html lang="en">
-<head>
+  <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Monster Clicker - Maintenance</title>
-    <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
+    <title>Monster Clicker</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;600;800&display=swap');
-        
-        body {
-            margin: 0;
-            padding: 0;
-            background-color: #050505;
-            color: #e2e8f0;
-            font-family: 'Inter', sans-serif;
-            overflow: hidden;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-        }
+      @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;600;800&display=swap');
+      
+      body {
+        margin: 0;
+        padding: 0;
+        background-color: #050505;
+        color: #e2e8f0;
+        font-family: 'Inter', sans-serif;
+        overflow: hidden;
+        user-select: none;
+      }
 
-        .font-display {
-            font-family: 'Orbitron', sans-serif;
-        }
+      .font-display {
+        font-family: 'Orbitron', sans-serif;
+      }
 
-        .maintenance-container {
-            position: relative;
-            z-index: 10;
-            text-align: center;
-        }
+      /* Custom scrollbar */
+      ::-webkit-scrollbar {
+        width: 6px;
+      }
+      ::-webkit-scrollbar-track {
+        background: #0f172a;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #334155;
+        border-radius: 10px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: #475569;
+      }
 
-        /* Animated glowing background */
-        .bg-glow {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 400px;
-            height: 400px;
-            background: radial-gradient(circle, rgba(50, 205, 50, 0.15) 0%, rgba(5, 5, 5, 0) 70%);
-            border-radius: 50%;
-            filter: blur(40px);
-            animation: pulse 4s infinite ease-in-out;
-        }
+      @keyframes float-up {
+        0% { transform: translateY(0) scale(1); opacity: 1; }
+        100% { transform: translateY(-100px) scale(1.2); opacity: 0; }
+      }
 
-        @keyframes pulse {
-            0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; }
-            50% { transform: translate(-50%, -50%) scale(1.2); opacity: 0.8; }
-        }
+      .particle {
+        position: absolute;
+        pointer-events: none;
+        animation: float-up 1s ease-out forwards;
+      }
 
-        .scanline {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 2px;
-            background: rgba(50, 205, 50, 0.1);
-            z-index: 20;
-            pointer-events: none;
-            animation: scan 8s linear infinite;
-        }
+      .glow-green {
+        text-shadow: 0 0 10px #32cd32, 0 0 20px #32cd32;
+      }
 
-        @keyframes scan {
-            from { transform: translateY(-100vh); }
-            to { transform: translateY(100vh); }
-        }
+      .monster-gradient {
+        background: linear-gradient(135deg, #0f172a 0%, #020617 100%);
+      }
 
-        .monster-can-placeholder {
-            width: 80px;
-            height: 140px;
-            background: linear-gradient(180deg, #1a1a1a 0%, #0a0a0a 100%);
-            border: 2px solid #32cd32;
-            border-radius: 10px;
-            margin: 0 auto 2rem;
-            position: relative;
-            box-shadow: 0 0 20px rgba(50, 205, 50, 0.2);
-            animation: float 3s infinite ease-in-out;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-15px); }
-        }
-
-        .monster-m {
-            font-family: 'Orbitron', sans-serif;
-            font-weight: 900;
-            color: #32cd32;
-            font-size: 3rem;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            text-shadow: 0 0 10px rgba(50, 205, 50, 0.5);
-        }
-
-        .progress-bar {
-            width: 200px;
-            height: 4px;
-            background: #1e293b;
-            border-radius: 2px;
-            margin: 1.5rem auto;
-            overflow: hidden;
-        }
-
-        .progress-fill {
-            height: 100%;
-            background: #32cd32;
-            width: 30%;
-            animation: loading 2s infinite ease-in-out;
-            box-shadow: 0 0 10px #32cd32;
-        }
-
-        @keyframes loading {
-            0% { width: 0%; transform: translateX(-100%); }
-            50% { width: 50%; transform: translateX(50%); }
-            100% { width: 0%; transform: translateX(200%); }
-        }
-
-        .support-link:hover {
-            text-shadow: 0 0 8px rgba(50, 205, 50, 0.4);
-        }
+      .can-shadow {
+        filter: drop-shadow(0 0 15px rgba(50, 205, 50, 0.3));
+      }
     </style>
+  <script type="importmap">
+{
+  "imports": {
+    "react/": "https://esm.sh/react@^19.2.3/",
+    "react": "https://esm.sh/react@^19.2.3",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
+    "lucide-react": "https://esm.sh/lucide-react@^0.562.0",
+    "framer-motion": "https://esm.sh/framer-motion@^12.26.2"
+  }
+}
+</script>
 </head>
-<body>
-    <div class="scanline"></div>
-    <div class="bg-glow"></div>
-
-    <div class="maintenance-container px-6">
-        <!-- Brand Icon -->
-        <div class="monster-can-placeholder">
-            <span class="monster-m">M</span>
-        </div>
-
-        <!-- Heading -->
-        <h1 class="font-display text-4xl md:text-5xl font-black mb-4 tracking-tighter uppercase italic">
-            Monster <span class="text-[#32cd32]">Clicker</span>
-        </h1>
-        
-        <div class="space-y-2">
-            <p class="text-xl font-semibold text-slate-200">Refueling the Fridge</p>
-            <p class="text-slate-400 max-w-md mx-auto text-sm md:text-base leading-relaxed">
-                Our servers are currently undergoing critical maintenance and optimization. 
-                We'll be back online with fresh inventory soon.
-            </p>
-        </div>
-
-        <!-- Animated Progress -->
-        <div class="progress-bar">
-            <div class="progress-fill"></div>
-        </div>
-
-        <!-- Status Details -->
-        <div class="mt-8 flex flex-col md:flex-row items-center justify-center gap-4 text-xs font-display uppercase tracking-widest text-slate-500">
-            <div class="flex items-center gap-2">
-                <span class="w-2 h-2 rounded-full bg-yellow-500 animate-pulse"></span>
-                System Update Almost Completed 
-            </div>
-            <div class="hidden md:block text-slate-700">|</div>
-            <div class="hover:text-[#32cd32] transition-colors cursor-help">
-                Estimated uptime: &lt; less then 2 hours 
-            </div>
-        </div>
-
-        <!-- Support Email Section -->
-        <div class="mt-12">
-            <p class="text-[10px] text-slate-600 uppercase tracking-[0.2em] mb-2 font-display">Technical Support</p>
-            <a href="mailto:officalmonsterenergyclicker@gmail.com" class="support-link text-slate-400 hover:text-[#32cd32] transition-all duration-300 text-sm border-b border-slate-800 hover:border-[#32cd32] pb-1">
-                officalmonsterenergyclicker@gmail.com
-            </a>
-        </div>
-    </div>
-
-    <!-- Script to simulate some background activity -->
-    <script>
-        // Periodic console logs for "hacky" feel
-        const logs = [
-            "Purging stale cache...",
-            "Optimizing monster levels...",
-            "Restocking energy drinks...",
-            "Encrypting save data...",
-            "Initializing ultra-click protocol..."
-        ];
-        
-        setInterval(() => {
-            const index = Math.floor(Math.random() * logs.length);
-            console.log(`[SYSTEM]: ${logs[index]}`);
-        }, 5000);
-    </script>
-</body>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/index.tsx"></script>
+  </body>
 </html>

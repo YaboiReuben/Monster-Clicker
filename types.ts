@@ -36,11 +36,22 @@ export interface PlayerStats {
   cps: number;
   clickPower: number;
   critChance: number;
-  inventory: string[]; // Flavor IDs
+  inventory: string[];
   equippedIds: string[];
   rebirths: number;
-  upgrades: Record<string, number>; // Upgrade ID -> Level
+  upgrades: Record<string, number>;
   saveStatus: 'Saved' | 'Saving' | 'Offline';
+  
+  // Admin Flags
+  isAdminEnabled: boolean;
+  isFrozen: boolean;
+  infiniteMep: boolean;
+  adminCpsMultiplier: number;
+  adminClickPowerMultiplier: number;
+  adminCpsFlatBonus: number;
+  noUpgradeCost: boolean;
+  forcedRarity: Rarity | null;
+  autoOpenCrates: boolean;
 }
 
 export interface Crate {
