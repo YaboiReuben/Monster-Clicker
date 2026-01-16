@@ -1,14 +1,15 @@
 
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Zap, Archive, ShoppingBag, TrendingUp, Lock, CheckCircle, X, Trophy, FlaskConical, Package, RotateCcw, Flame, AlertTriangle, Mail } from 'lucide-react';
+import { Zap, Archive, ShoppingBag, TrendingUp, Lock, CheckCircle, X, Trophy, FlaskConical, Package, RotateCcw, Flame, AlertTriangle, Mail, Terminal, Cloud, Cpu, Code, Server, FileCode, Database, Send, ZapOff } from 'lucide-react';
 import { PlayerStats, Flavor, Rarity, Upgrade, Crate } from './types';
 import { FLAVORS, CRATES, UPGRADES, REBIRTH_STAGES } from './constants';
 import { formatNumber } from './Notation';
+import DevHub from './DevHub';
 
 // --- Components ---
 
-const TopBar: React.FC<{ stats: PlayerStats, onLogoClick: () => void }> = ({ stats, onLogoClick }) => {
+const TopBar: React.FC<{ stats: PlayerStats, onLogoClick: () => void, onOpenDevHub: () => void }> = ({ stats, onLogoClick, onOpenDevHub }) => {
   return (
     <div className="h-16 border-b border-slate-800 bg-black/80 backdrop-blur-md flex items-center justify-between px-6 sticky top-0 z-50">
       <div className="flex items-center gap-4">
@@ -27,7 +28,16 @@ const TopBar: React.FC<{ stats: PlayerStats, onLogoClick: () => void }> = ({ sta
         </div>
       </div>
 
-      <div className="flex items-center gap-6">
+      <div className="flex items-center gap-4">
+        {/* Dev Tools Link */}
+        <button 
+          onClick={onOpenDevHub}
+          className="flex items-center gap-2 text-[9px] font-black text-cyan-400 hover:text-white transition-colors uppercase tracking-widest bg-cyan-950/30 border border-cyan-800/50 px-3 py-1 rounded-full shadow-[0_0_10px_rgba(34,211,238,0.1)]"
+        >
+          <Terminal className="w-3 h-3" />
+          Dev Hub
+        </button>
+
         <a 
           href="mailto:officalmonsterenergyclicker@gmail.com" 
           className="hidden md:flex items-center gap-2 text-[9px] font-black text-slate-500 hover:text-[#32CD32] transition-colors uppercase tracking-widest bg-slate-900/50 border border-slate-800 px-3 py-1 rounded-full"
@@ -241,7 +251,7 @@ const AdminPanel: React.FC<{
   );
 
   return (
-    <div className="fixed inset-0 z-[200] bg-[#020617] flex flex-col">
+    <div className="fixed inset-0 z-[200] bg-[#020617] flex flex-col font-sans">
       <div className="h-20 border-b border-slate-800 flex items-center justify-between px-8 bg-black/50">
         <div className="flex items-center gap-4">
           <FlaskConical className="w-8 h-8 text-[#32CD32]" />
@@ -501,7 +511,7 @@ const RebirthWarningModal: React.FC<{ onConfirm: () => void, onCancel: () => voi
         </div>
         <div>
           <h3 className="text-3xl font-display font-black text-white uppercase tracking-tighter mb-2">FINAL WARNING</h3>
-          <p className="text-slate-400 text-sm leading-relaxed">
+          <p className="text-slate-400 text-sm leading-relaxed font-sans">
             Rebirthing will reset your current <span className="text-white font-bold font-display">MEP balance</span> and <span className="text-red-500 font-bold">all collected flavors</span>. 
             However, you will keep all of your purchased <span className="text-[#32CD32] font-bold">Upgrades</span> and gain a <span className="text-yellow-500 font-bold font-display">{bonus}x Multiplier</span>.
           </p>
@@ -542,6 +552,7 @@ const App: React.FC = () => {
 
   const [floatingParticles, setFloatingParticles] = useState<{ id: number, x: number, y: number, value: string, isAuto?: boolean }[]>([]);
   const [showAdmin, setShowAdmin] = useState(false);
+  const [showDevHub, setShowDevHub] = useState(false);
   const [showRebirthModal, setShowRebirthModal] = useState(false);
   const logoClickCount = useRef(0);
   const lastSaveTime = useRef(Date.now());
@@ -612,7 +623,6 @@ const App: React.FC = () => {
     return () => clearInterval(loop);
   }, [stats.cps, stats.isFrozen, stats.infiniteMep]);
 
-  // Caffeinated Fingers (The specialized Auto-Clicker)
   useEffect(() => {
     const fingerLevel = stats.upgrades['auto-fingers'] || 0;
     if (fingerLevel > 0 && !stats.isFrozen) {
@@ -750,7 +760,6 @@ const App: React.FC = () => {
   const handleRebirth = () => {
     const stage = REBIRTH_STAGES[stats.rebirths] || REBIRTH_STAGES[REBIRTH_STAGES.length - 1];
     if (stats.mep >= stage.milestone || stats.isAdminEnabled) {
-      // LOSE flavors, KEEP upgrades
       setStats(prev => ({
         ...prev,
         mep: 0,
@@ -766,8 +775,8 @@ const App: React.FC = () => {
   const mainEquippedFlavor = FLAVORS.find(f => f.id === stats.equippedIds[0]) || FLAVORS[0];
 
   return (
-    <div className="flex flex-col h-screen monster-gradient overflow-hidden">
-      <TopBar stats={stats} onLogoClick={handleLogoClick} />
+    <div className="flex flex-col h-screen monster-gradient overflow-hidden selection:bg-[#32CD32] selection:text-black">
+      <TopBar stats={stats} onLogoClick={handleLogoClick} onOpenDevHub={() => setShowDevHub(true)} />
       
       <div className="flex flex-1 overflow-hidden">
         <InventoryPanel 
@@ -828,17 +837,21 @@ const App: React.FC = () => {
         {floatingParticles.map(p => (
           <div 
             key={p.id} 
-            className={`particle font-display font-black text-xl pointer-events-none drop-shadow-lg z-[999] flex flex-col items-center ${p.isAuto ? 'text-blue-400' : 'text-[#32CD32]'}`} 
+            className={`particle font-display font-black text-xl pointer-events-none drop-shadow-lg z-[999] flex flex-col items-center ${p.isAuto ? 'text-blue-400 font-sans italic' : 'text-[#32CD32]'}`} 
             style={{ left: p.x, top: p.y }}
           >
             {p.value}
-            {p.isAuto && <span className="text-[8px] font-black -mt-1 tracking-tighter bg-blue-500 text-white px-1 rounded">AUTO</span>}
+            {p.isAuto && <span className="text-[8px] font-black -mt-1 tracking-tighter bg-blue-500 text-white px-1 rounded shadow-lg uppercase">Auto</span>}
           </div>
         ))}
       </AnimatePresence>
 
       <AnimatePresence>
         {showAdmin && <AdminPanel stats={stats} setStats={setStats} onClose={() => setShowAdmin(false)} />}
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {showDevHub && <DevHub onClose={() => setShowDevHub(false)} />}
       </AnimatePresence>
 
       <AnimatePresence>
